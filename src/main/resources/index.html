@@ -1,0 +1,73 @@
+<!-- src/main/resources/templates/index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Task Manager</title>
+</head>
+<body>
+<h1>AI Task Manager - Panel administracyjny</h1>
+
+<h2>Dodaj nowy projekt</h2>
+<form th:action="@{/add_project}" method="post">
+    <label for="name">Nazwa projektu:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <label for="description">Opis:</label>
+    <textarea id="description" name="description"></textarea>
+    <br>
+    <button type="submit">Dodaj projekt</button>
+</form>
+
+<h2>Lista projektów</h2>
+<ul>
+    <li th:if="${#lists.isEmpty(projects)}">Brak projektów.</li>
+    <li th:each="project : ${projects}">
+        <strong th:text="${project.name}"></strong> (ID: <span th:text="${project.id}"></span>)<br>
+        <span th:text="${project.description}"></span>
+    </li>
+</ul>
+
+<hr>
+
+<h2>Dodaj nowe zadanie</h2>
+<form th:action="@{/add_task}" method="post">
+    <label for="project_id">ID projektu:</label>
+    <input type="number" id="project_id" name="project_id" required>
+    <br>
+    <label for="name">Nazwa zadania:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <label for="description">Opis:</label>
+    <textarea id="description" name="description"></textarea>
+    <br>
+    <label for="assigned_to">Przypisany do:</label>
+    <input type="text" id="assigned_to" name="assigned_to">
+    <br>
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+        <option value="todo" selected>todo</option>
+        <option value="in_progress">in_progress</option>
+        <option value="done">done</option>
+    </select>
+    <br>
+    <button type="submit">Dodaj zadanie</button>
+</form>
+
+<h2>Lista zadań</h2>
+<ul>
+    <li th:if="${#lists.isEmpty(tasks)}">Brak zadań.</li>
+    <li th:each="task : ${tasks}">
+        <strong th:text="${task.name}"></strong> (ID: <span th:text="${task.id}"></span>, Projekt: <span th:text="${task.project.id}"></span>)<br>
+        Opis: <span th:text="${task.description}"></span><br>
+        Przypisany do: <span th:text="${task.assignedTo}"></span><br>
+        Status: <span th:text="${task.status}"></span><br>
+        Utworzono: <span th:text="${task.createdAt}"></span>
+    </li>
+</ul>
+
+<hr>
+<h2>Analiza produktywności</h2>
+<p>Aby zobaczyć analizę, przejdź do: <a th:href="@{/view_analysis}">/view_analysis</a></p>
+</body>
+</html>
