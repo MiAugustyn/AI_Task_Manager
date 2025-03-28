@@ -1,0 +1,28 @@
+<!-- templates/projects.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Projekty</h1>
+  <!-- Przycisk do dodawania nowego projektu -->
+  <a href="{{ url_for('views_bp.create_project') }}" class="btn btn-primary mb-3">Dodaj projekt</a>
+  <!-- Tabela z listą projektów -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nazwa</th>
+        <th>Opis</th>
+        <th>Data utworzenia</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in projects %}
+      <tr>
+        <td>{{ project.id }}</td>
+        <td>{{ project.name }}</td>
+        <td>{{ project.description }}</td>
+        <td>{{ project.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

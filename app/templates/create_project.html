@@ -1,0 +1,17 @@
+<!-- templates/create_project.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Dodaj nowy projekt</h1>
+  <!-- Formularz tworzenia projektu -->
+  <form method="post">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nazwa projektu</label>
+      <input type="text" class="form-control" id="name" name="name">
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Opis projektu</label>
+      <textarea class="form-control" id="description" name="description"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Utwórz projekt</button>
+  </form>
+{% endblock %}

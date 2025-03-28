@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Dodaj Pracownika</h1>
+    <form method="POST" action="{{ url_for('views_bp.create_employee') }}">
+      <label for="name">Imię:</label>
+      <input type="text" id="name" name="name" required>
+      <br>
+      <label for="role">Stanowisko:</label>
+      <input type="text" id="role" name="role" required>
+      <br>
+      <label for="email">Adres e-mail:</label>
+      <input type="text" id="email" name="email" required>
+      <br>
+      <button type="submit">Dodaj</button>
+    </form>
+    <br>
+    <a href="{{ url_for('views_bp.list_employees') }}">Powrót do listy pracowników</a>
+{% endblock %}

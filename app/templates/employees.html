@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Lista Pracowników</h1>
+    <a href="{{ url_for('views_bp.create_employee') }}" class="btn btn-primary mb-3">Dodaj pracownika</a>
+    <ul>
+      {% for emp in employees %}
+        <li>{{ emp.name }} - {{ emp.role }}</li>
+      {% else %}
+        <li>Brak pracowników.</li>
+      {% endfor %}
+    </ul>
+{% endblock %}
