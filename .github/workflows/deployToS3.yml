@@ -5,6 +5,11 @@ on:
     branches:
     - master
 
+env:
+  secret_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  secret_bucket: ${{ secrets.AWS_S3_BUCKET }}
+  secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
