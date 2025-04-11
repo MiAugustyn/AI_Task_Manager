@@ -49,6 +49,15 @@ def list_tasks():
 
     return render_template('tasks.html', tasks=tasks)
 
+@views_bp.route('/list_tasks/<int:task_id>', methods=['GET', 'POST'])
+def remove_task(task_id):
+    if request.method == 'POST':
+        task = Task.query.where(Task.id == task_id).first()
+        db.session.delete(task)
+        db.session.commit()
+    tasks = Task.query.all()
+    return render_template('tasks.html', tasks=tasks)
+
 
 # Widok formularza tworzenia nowego zadania
 @views_bp.route('/tasks/new', methods=['GET', 'POST'])
@@ -96,6 +105,7 @@ def assign_employee(project_id):
             db.session.commit()
             return redirect(url_for('views_bp.assign_employees', project_id=project_id))
     return redirect(url_for('views_bp.list_projects'))
+
 
 @views_bp.route('/employee/deassign/<int:project_id>', methods=['GET', 'POST'])
 def deassign_employee(project_id):
