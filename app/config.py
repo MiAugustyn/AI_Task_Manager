@@ -4,6 +4,7 @@ import os
 
 class Config:
     # Ustawienia trybu debug oraz klucz sesji (pobrane z zmiennych środowiskowych lub domyślne)
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'secret_key')
     DEBUG = os.environ.get('FLASK_DEBUG', False)
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_S3_BUCKET = os.environ.get('AWS_S3_BUCKET')

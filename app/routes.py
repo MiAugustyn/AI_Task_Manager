@@ -35,7 +35,6 @@ def create_task_api():
     project_id = data.get('project_id')
     title = data.get('title')
     description = data.get('description', '')
-    assigned_to = data.get('assigned_to', '')
     if not project_id or not title:
         return jsonify({'error': 'project_id oraz tytuł są wymagane'}), 400
     # Sprawdzamy, czy projekt o podanym ID istnieje
@@ -43,13 +42,12 @@ def create_task_api():
     if not project:
         return jsonify({'error': 'Projekt nie został znaleziony'}), 404
     # Tworzymy nowe zadanie
-    task = Task(project_id=project_id, title=title, description=description, assigned_to=assigned_to)
+    task = Task(project_id=project_id, title=title, description=description)
     db.session.add(task)
     db.session.commit()
     return jsonify({
         'id': task.id,
         'title': task.title,
-        'assigned_to': task.assigned_to,
         'status': task.status
     }), 201
 
@@ -62,7 +60,6 @@ def get_tasks_api():
         'project_id': t.project_id,
         'title': t.title,
         'description': t.description,
-        'assigned_to': t.assigned_to,
         'status': t.status
     } for t in tasks]
     return jsonify(result)
@@ -77,13 +74,11 @@ def update_task_api(task_id):
     # Aktualizacja pól zadania, jeśli zostały przesłane w żądaniu
     task.title = data.get('title', task.title)
     task.description = data.get('description', task.description)
-    task.assigned_to = data.get('assigned_to', task.assigned_to)
     task.status = data.get('status', task.status)
     db.session.commit()
     return jsonify({
         'id': task.id,
         'title': task.title,
-        'assigned_to': task.assigned_to,
         'status': task.status
     })
 

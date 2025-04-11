@@ -23,7 +23,7 @@
         <td>{{ task.id }}</td>
         <td>{{ task.title }}</td>
         <td>{{ task.description }}</td>
-        <td>{{ task.assigned_to }}</td>
+        <td>{% for employee in task.employees.all() %} {{ employee.name }} {% endfor %}</td>
         <td>{{ task.status }}</td>
         <td>{{ task.project.name if task.project else 'Brak' }}</td>
         <td>{{ task.created_at }}</td>

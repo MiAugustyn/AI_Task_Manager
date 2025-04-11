@@ -1,8 +1,7 @@
 # app/ai_routes.py
-from flask import Blueprint, request, jsonify
-from .models import Project, Task
+from flask import Blueprint, request, jsonify, redirect, url_for
+from .models import Project, Task, Employee
 from . import db
-import random
 
 # Tworzymy blueprint dla endpointów z logiką "AI"
 ai_bp = Blueprint('ai_bp', __name__)
@@ -10,10 +9,10 @@ ai_bp = Blueprint('ai_bp', __name__)
 # Przykładowy endpoint symulujący automatyczne przydzielanie zadania
 @ai_bp.route('/assign', methods=['POST'])
 def assign_task():
-    data = request.get_json()  # Pobieramy dane JSON z żądania
-    project_id = data.get('project_id')
-    title = data.get('title')
-    description = data.get('description', '')
+    #data = request.get_json()  # Pobieramy dane JSON z żądania
+    project_id = request.form.get('project_id')
+    title = request.form.get('title')
+    description = request.form.get('description', '')
     if not project_id or not title:
         return jsonify({'error': 'project_id oraz tytuł są wymagane'}), 400
     # Sprawdzamy, czy projekt o podanym ID istnieje
@@ -21,16 +20,36 @@ def assign_task():
     if not project:
         return jsonify({'error': 'Projekt nie został znaleziony'}), 404
 
-    # Przykładowa logika "AI" – losowo wybieramy członka zespołu
-    team_members = ["Alice", "Bob", "Charlie"]
-    assigned_to = random.choice(team_members)
+    try:
+        project_id = int(project_id)
+    except ValueError:
+        return jsonify({'error': 'Nieprawidłowy format project_id'}), 400
+
+    employee = None
+    lowest = None
+    employees = Employee.query.filter(Employee.projects.any(Project.id == project_id)).all()
+
+    if not employees:
+        return jsonify({'error': 'Brak dostępnych pracowników w projekcie'}), 400
+
+    for x in employees:
+        tasks = Task.query.filter(Task.employees.any(Employee.id == x.id)).count()
+        if lowest is None or lowest > tasks:
+            lowest = tasks
+            employee = x
+
+    if employee is None:
+        return jsonify({'error': 'Nie udało się przypisać pracownika do zadania'}), 400
     # Tworzymy zadanie z przypisanym członkiem zespołu
-    task = Task(project_id=project_id, title=title, description=description, assigned_to=assigned_to)
+    task = Task(project_id=project_id, title=title, description=description)
+    task.employees.append(employee)
+    db.session.flush()
     db.session.add(task)
     db.session.commit()
-    return jsonify({
-        'id': task.id,
-        'title': task.title,
-        'assigned_to': task.assigned_to,
-        'status': task.status
-    }), 201
+
+    return redirect(url_for('views_bp.list_tasks'))
+    #     jsonify({
+    #     'id': task.id,
+    #     'title': task.title,
+    #     'status': task.status
+    # }), 201)

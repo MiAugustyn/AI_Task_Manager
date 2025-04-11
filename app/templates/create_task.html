@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Dodaj nowe zadanie</h1>
   <!-- Formularz tworzenia zadania -->
-  <form method="post">
+  <form action="{{ url_for('ai_bp.assign_task') }}" method="post">
     <div class="mb-3">
       <label for="project_id" class="form-label">Projekt</label>
       <select class="form-control" id="project_id" name="project_id">
@@ -19,10 +19,6 @@
     <div class="mb-3">
       <label for="description" class="form-label">Opis zadania</label>
       <textarea class="form-control" id="description" name="description"></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="assigned_to" class="form-label">Przypisz do</label>
-      <input type="text" class="form-control" id="assigned_to" name="assigned_to">
     </div>
     <button type="submit" class="btn btn-primary">Utwórz zadanie</button>
   </form>

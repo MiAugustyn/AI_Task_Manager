@@ -46,6 +46,7 @@ def create_project():
 @views_bp.route('/list_tasks')
 def list_tasks():
     tasks = Task.query.all()
+
     return render_template('tasks.html', tasks=tasks)
 
 
@@ -58,7 +59,6 @@ def create_task():
         project_id = request.form.get('project_id')
         title = request.form.get('title')
         description = request.form.get('description')
-        assigned_to = request.form.get('assigned_to')
         if not project_id or not title:
             flash("Projekt i tytuł zadania są wymagane")
             return redirect(url_for('views_bp.create_task'))
@@ -68,12 +68,46 @@ def create_task():
             flash("Projekt nie został znaleziony")
             return redirect(url_for('views_bp.create_task'))
         # Tworzymy nowe zadanie
-        task = Task(project_id=project_id, title=title, description=description, assigned_to=assigned_to)
+        task = Task(project_id=project_id, title=title, description=description)
         db.session.add(task)
         db.session.commit()
         flash("Zadanie zostało utworzone!")
         return redirect(url_for('views_bp.list_tasks'))
     return render_template('create_task.html', projects=projects)
+
+
+@views_bp.route('/assign_employees/<int:project_id>')
+def assign_employees(project_id):
+    project = Project.query.where(Project.id == project_id).first()
+    employees = Employee.query.filter(Employee.projects.any(Project.id == project.id)).all()
+    all_employees = Employee.query.all()
+
+    return render_template('manage_projects.html', employees=employees, all_employees=all_employees, project=project)
+
+
+@views_bp.route('/employee/assign/<int:project_id>', methods=['GET', 'POST'])
+def assign_employee(project_id):
+    if request.method == 'POST':
+        id = request.form.get('employee')
+        if id:
+            employee = Employee.query.where(Employee.id == id).first()
+            project = Project.query.where(Project.id == project_id).first()
+            employee.projects += [project]
+            db.session.commit()
+            return redirect(url_for('views_bp.assign_employees', project_id=project_id))
+    return redirect(url_for('views_bp.list_projects'))
+
+@views_bp.route('/employee/deassign/<int:project_id>', methods=['GET', 'POST'])
+def deassign_employee(project_id):
+    if request.method == 'POST':
+        id = request.form.get('employee')
+        if id:
+            employee = Employee.query.where(Employee.id == id).first()
+            project = Project.query.where(Project.id == project_id).first()
+            employee.projects.remove(project)
+            db.session.commit()
+            return redirect(url_for('views_bp.assign_employees', project_id=project_id))
+    return redirect(url_for('views_bp.list_projects'))
 
 
 @views_bp.route('/list_employees')
