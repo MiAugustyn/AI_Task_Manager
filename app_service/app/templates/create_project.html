@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - Nowy projekt{% endblock %}
+
+{% block content %}
+<h1>Nowy projekt</h1>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nazwa projektu *</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Opis</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Utwórz projekt</button>
+            <a href="{{ url_for('views_bp.list_projects') }}" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

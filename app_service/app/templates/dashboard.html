@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - Pracownicy{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+    <h3>Zadania</h3>
+</div>
+
+    <div class="table-responsive" style="width: 50%">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Wskaźnik</th>
+                    <th>Wartosć</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>Produktywność</td>
+                    <td>{{ productivity }}%</td>
+                </tr>
+                <tr>
+                    <td>Wszystkie zadania</td>
+                    <td>{{ total_tasks }}</td>
+                </tr>
+                <tr>
+                    <td>Wykonane zadania</td>
+                    <td>{{ done_tasks }}</td>
+                </tr>
+                <tr>
+                    <td>Oczekujace zadania</td>
+                    <td>{{ pending_tasks }}</td>
+                </tr>
+                <tr>
+                    <td>Zadania w trakcie</td>
+                    <td>{{ in_progress_tasks }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div><br>
+
+
+<div class="d-flex justify-content-between align-items-center">
+    <h3>Projekty</h3>
+</div>
+{% if project_stats %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th>Zadania</th>
+                    <th>Wykonane</th>
+                    <th>Produktywność</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in project_stats %}
+                <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.total }}</td>
+                    <td>{{ project.done }}</td>
+                    <td>{{ project.productivity }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">Brak projektów.</div>
+{% endif %}
+<br>
+
+<div class="d-flex justify-content-between align-items-center">
+    <h3>Pracownicy</h3>
+</div>
+{% if employee_stats %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Imię</th>
+                    <th>Zadania</th>
+                    <th>Wykonane</th>
+                    <th>Produktywność</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employee_stats %}
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.total }}</td>
+                    <td>{{ employee.done }}</td>
+                    <td>{{ employee.productivity }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">Brak pracowników.</div>
+{% endif %}
+
+{% endblock %}

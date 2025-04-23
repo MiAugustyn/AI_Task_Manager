@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - Projekty{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Projekty</h1>
+    <a href="{{ url_for('views_bp.create_project') }}" class="btn btn-primary">+ Nowy projekt</a>
+</div>
+
+{% if projects %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Data utworzenia</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <a href="{{ url_for('views_bp.assign_employees', project_id=project.id) }}" class="btn btn-sm btn-info">Zarządzaj pracownikami</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">Brak projektów. Utwórz nowy projekt.</div>
+{% endif %}
+{% endblock %}

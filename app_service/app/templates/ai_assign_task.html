@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - AI Przydzielanie{% endblock %}
+
+{% block content %}
+<h1>AI Przydzielanie zadań</h1>
+<p class="lead">Formularz przydzielania zadań z automatycznym wyborem pracownika przez AI.</p>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="project_id" class="form-label">Projekt *</label>
+                <select class="form-select" id="project_id" name="project_id" required>
+                    <option value="">Wybierz projekt</option>
+                    {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="title" class="form-label">Tytuł zadania *</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Opis</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> System AI automatycznie wybierze najlepszego pracownika do tego zadania na podstawie ich obecnego obciążenia pracą.
+            </div>
+            <button type="submit" class="btn btn-success">Przydziel zadanie przez AI</button>
+            <a href="{{ url_for('views_bp.list_tasks') }}" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

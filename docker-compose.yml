@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  # Serwis bazy danych
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_manager
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Główna aplikacja web
+  app:
+    build:
+      context: ./app_service
+      dockerfile: Dockerfile
+    volumes:
+      - ./app_service:/app
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/task_manager
+      FLASK_APP: run.py
+      FLASK_DEBUG: "true"
+    depends_on:
+      - db
+
+  # Serwis przydzielania zadań
+  task_assign:
+    build:
+      context: ./task_assign_service
+      dockerfile: Dockerfile
+    volumes:
+      - ./task_assign_service:/app
+    ports:
+      - "5001:5000"
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/task_manager
+      FLASK_APP: run.py
+      FLASK_DEBUG: "true"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

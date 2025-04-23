@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - Zadania{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Zadania</h1>
+    <div>
+        <a href="{{ url_for('views_bp.create_task') }}" class="btn btn-primary me-2">+ Nowe zadanie</a>
+        <a href="{{ url_for('views_bp.ai_assign_task') }}" class="btn btn-success">+ AI Przydzielanie</a>
+    </div>
+</div>
+
+{% if tasks %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Projekt</th>
+                    <th>Tytuł</th>
+                    <th>Opis</th>
+                    <th>Status</th>
+                    <th>Przypisani pracownicy</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.project.name }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('views_bp.update_task_status', task_id=task.id) }}">
+                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="pending" {% if task.status == 'pending' %}selected{% endif %}>Oczekujące</option>
+                                <option value="in progress" {% if task.status == 'in progress' %}selected{% endif %}>W trakcie</option>
+                                <option value="done" {% if task.status == 'done' %}selected{% endif %}>Zakończone</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        {% for employee in task.employees %}
+                            <span class="badge bg-info">{{ employee.name }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Brak</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('views_bp.remove_task', task_id=task.id) }}" onsubmit="return confirm('Czy na pewno chcesz usunąć to zadanie?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">Brak zadań. Utwórz nowe zadanie.</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - Nowe zadanie{% endblock %}
+
+{% block content %}
+<h1>Nowe zadanie</h1>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="project_id" class="form-label">Projekt *</label>
+                <select class="form-select" id="project_id" name="project_id" required>
+                    <option value="">Wybierz projekt</option>
+                    {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="title" class="form-label">Tytuł zadania *</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Opis</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Utwórz zadanie</button>
+            <a href="{{ url_for('views_bp.list_tasks') }}" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

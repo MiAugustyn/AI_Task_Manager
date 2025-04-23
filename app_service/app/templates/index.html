@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}AI Task Manager - Strona główna{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Witaj w AI Task Manager!</h1>
+    <p class="lead">System zarządzania zadaniami z wykorzystaniem mikrousług i AI</p>
+    <hr class="my-4">
+    <p>Wybierz jedną z opcji, aby rozpocząć:</p>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Projekty</h5>
+                    <p class="card-text">Zarządzaj projektami, przeglądaj postępy i przydzielaj pracowników.</p>
+                    <a href="{{ url_for('views_bp.list_projects') }}" class="btn btn-primary">Przejdź do projektów</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Zadania</h5>
+                    <p class="card-text">Twórz i zarządzaj zadaniami, śledź postępy i aktualizuj statusy.</p>
+                    <a href="{{ url_for('views_bp.list_tasks') }}" class="btn btn-primary">Przejdź do zadań</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pracownicy</h5>
+                    <p class="card-text">Zarządzaj pracownikami, śledź ich pracę i przypisuj ich do projektów.</p>
+                    <a href="{{ url_for('views_bp.list_employees') }}" class="btn btn-primary">Przejdź do pracowników</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">AI Przydzielanie</h5>
+                    <p class="card-text">Użyj AI do automatycznego przydzielania zadań pracownikom.</p>
+                    <a href="{{ url_for('views_bp.ai_assign_task') }}" class="btn btn-success">AI Przydzielanie</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Analiza</h5>
+                    <p class="card-text">Sprawdź analizy postępów, produktywności i inne statystyki.</p>
+                    <a href="{{ url_for('analysis_bp.productivity_dashboard') }}" class="btn btn-info">Przejdź do analiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

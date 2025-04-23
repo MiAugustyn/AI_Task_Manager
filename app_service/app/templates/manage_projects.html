@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Zarządzaj projektem {{ project.name }}</h1>
+  <!-- Tabela z listą projektów -->
+  <div style="display: flex; flex-direction: row;">
+  <table class="table" style="width: 50%">
+    <thead>
+      <tr>
+        <th>Wszyscy pracownicy</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in all_employees %}
+      <tr>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.role}}</td>
+        <td><form action="{{ url_for('views_bp.assign_employee', project_id = project.id) }}" method="POST">
+          <button type="submit" value="{{ employee.id }}" name="employee" class="btn btn-primary">+</button>
+        </form></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+    <table class="table" style="width: 50%">
+    <thead>
+      <tr>
+        <th>Pracownicy w projekcie</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in employees %}
+      <tr>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.role}}</td>
+        <td><form action="{{ url_for('views_bp.deassign_employee', project_id = project.id) }}" method="POST">
+          <button type="submit" value="{{ employee.id }}" name="employee" class="btn btn-primary">-</button>
+        </form></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+  </div>
